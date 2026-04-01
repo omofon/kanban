@@ -1,7 +1,45 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap");
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
-    --font-jakarta: "Plus Jakarta Sans", sans-serif;
+  --font-jakarta: "Plus Jakarta Sans", sans-serif;
+
+  /* Surfaces */
+  --color-canvas:          hsl(220 69% 97%);
+  --color-surface:         hsl(0 0% 100%);
+  --color-surface-raised:  hsl(221 69% 94%);
+  --color-surface-overlay: hsl(0 0% 100%);
+  --color-border:          hsl(221 69% 94%);
+
+  /* Brand */
+  --color-brand:        hsl(242 48% 58%);
+  --color-brand-light:  hsl(243 100% 82%);
+  --color-brand-hover:  hsl(242 48% 48%);
+  --color-brand-subtle: hsl(243 100% 92%);
+
+  /* Text */
+  --color-text-primary:   hsl(237 100% 4%);
+  --color-text-secondary: hsl(216 15% 57%);
+  --color-text-on-brand:  hsl(0 0% 100%);
+
+  /* Status */
+  --color-todo:  hsl(174 60% 51%);
+  --color-doing: hsl(242 48% 58%);
+  --color-done:  hsl(152 55% 52%);
+
+  /* Destructive */
+  --color-danger:        hsl(0 78% 63%);
+  --color-danger-light:  hsl(0 100% 80%);
+  --color-danger-subtle: hsl(0 78% 95%);
+}
+
+/* Only override what changes in dark mode */
+.dark {
+  --color-canvas:          hsl(237 100% 4%);
+  --color-surface:         hsl(235 12% 19%);
+  --color-surface-raised:  hsl(235 16% 15%);
+  --color-surface-overlay: hsl(236 11% 27%);
+  --color-border:          hsl(236 11% 27%);
 }
