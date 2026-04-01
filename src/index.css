@@ -35,7 +35,7 @@
   --color-danger-subtle: hsl(0 78% 95%);
 }
 
-/* Only override what changes in dark mode */
+/* Dark mode */
 .dark {
   --color-canvas:          hsl(237 100% 4%);
   --color-surface:         hsl(235 12% 19%);
