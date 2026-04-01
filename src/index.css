@@ -6,40 +6,104 @@
 @theme {
   --font-jakarta: "Plus Jakarta Sans", sans-serif;
 
-  /* Surfaces */
-  --color-canvas:          hsl(220 69% 97%);
-  --color-surface:         hsl(0 0% 100%);
-  --color-surface-raised:  hsl(221 69% 94%);
-  --color-surface-overlay: hsl(0 0% 100%);
-  --color-border:          hsl(221 69% 94%);
+  /* ── Raw palette ── */
+  --color-black: hsl(237 100% 4%);
+  --color-very-dark-grey: hsl(235 16% 15%);
+  --color-dark-grey: hsl(235 12% 19%);
+  --color-lines-dark: hsl(236 11% 27%);
+  --color-medium-grey: hsl(216 15% 57%);
+  --color-lines-light: hsl(221 69% 94%);
+  --color-light-grey: hsl(220 69% 97%);
+  --color-white: hsl(0 0% 100%);
+  --color-main-purple: hsl(242 48% 58%);
+  --color-main-purple-hover: hsl(243 100% 82%);
+  --color-red: hsl(0 78% 63%);
+  --color-red-hover: hsl(0 100% 80%);
 
-  /* Brand */
-  --color-brand:        hsl(242 48% 58%);
-  --color-brand-light:  hsl(243 100% 82%);
-  --color-brand-hover:  hsl(242 48% 48%);
+  /* ── Surfaces ── */
+  --color-canvas: var(--color-light-grey);
+  --color-surface: var(--color-white);
+  --color-modal: var(--color-white);
+  --color-edge: var(--color-lines-light);
+
+  /* ── Brand ── */
+  --color-brand: var(--color-main-purple);
+  --color-brand-hover: var(--color-main-purple-hover);
   --color-brand-subtle: hsl(243 100% 92%);
 
-  /* Text */
-  --color-text-primary:   hsl(237 100% 4%);
-  --color-text-secondary: hsl(216 15% 57%);
-  --color-text-on-brand:  hsl(0 0% 100%);
+  /* ── Text ── */
+  --color-ink: var(--color-black);
+  --color-ink-muted: var(--color-medium-grey);
+  --color-ink-white: var(--color-white);
 
-  /* Status */
-  --color-todo:  hsl(174 60% 51%);
-  --color-doing: hsl(242 48% 58%);
-  --color-done:  hsl(152 55% 52%);
+  /* ── Status ── */
+  --color-todo: hsl(174 60% 51%);
+  --color-doing: var(--color-main-purple);
+  --color-done: hsl(152 55% 52%);
 
-  /* Destructive */
-  --color-danger:        hsl(0 78% 63%);
-  --color-danger-light:  hsl(0 100% 80%);
+  /* ── Destructive ── */
+  --color-danger: var(--color-red);
+  --color-danger-hover: var(--color-red-hover);
   --color-danger-subtle: hsl(0 78% 95%);
 }
 
-/* Dark mode */
+/* ── Dark mode overrides ── */
 .dark {
-  --color-canvas:          hsl(237 100% 4%);
-  --color-surface:         hsl(235 12% 19%);
-  --color-surface-raised:  hsl(235 16% 15%);
-  --color-surface-overlay: hsl(236 11% 27%);
-  --color-border:          hsl(236 11% 27%);
+  --color-canvas: var(--color-dark-grey);
+  --color-surface: var(--color-very-dark-grey);
+  --color-modal: var(--color-lines-dark);
+  --color-edge: var(--color-lines-dark);
+  --color-ink: var(--color-white);
+}
+
+/* ── Base styles ── */
+@layer base {
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-jakarta);
+  }
+
+  h1 {
+    font-size: 24px;
+    line-height: 30px;
+    font-weight: 700;
+  }
+
+  h2 {
+    font-size: 18px;
+    line-height: 23px;
+    font-weight: 700;
+  }
+
+  h3 {
+    font-size: 15px;
+    line-height: 19px;
+    font-weight: 700;
+  }
+
+  h4 {
+    font-size: 12px;
+    line-height: 15px;
+    font-weight: 700;
+    letter-spacing: 2.4px;
+  }
+
+  p {
+    font-size: 13px;
+    line-height: 23px;
+    font-weight: 500;
+    color: var(--color-ink-muted);
+  }
+
+  small {
+    font-size: 12px;
+    line-height: 15px;
+    font-weight: 700;
+  }
+
+  * {
+    border-color: var(--color-edge);
+    box-sizing: border-box;
+  }
 }

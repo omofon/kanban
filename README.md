@@ -1,16 +1,51 @@
-# React + Vite
+# Kanban Task Management App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Idea Layout
+```
+src/
+├── main.jsx
+├── index.css
+│
+├── assets/                  # static files, svgs, images
+│
+├── components/              # reusable UI primitives
+│   ├── ui/
+│   │   ├── Button.jsx
+│   │   ├── Input.jsx
+│   │   ├── Dropdown.jsx
+│   │   ├── Checkbox.jsx
+│   │   ├── Modal.jsx
+│   │   └── Badge.jsx
+│   │
+│   ├── board/
+│   │   ├── Board.jsx
+│   │   ├── Column.jsx
+│   │   ├── ColumnHeader.jsx
+│   │   └── NewColumn.jsx
+│   │
+│   ├── task/
+│   │   ├── TaskCard.jsx
+│   │   ├── TaskDetail.jsx   # the modal you showed in the screenshots
+│   │   └── TaskForm.jsx     # add / edit task form
+│   │
+│   └── layout/
+│       ├── Sidebar.jsx
+│       ├── Header.jsx
+│       └── ThemeToggle.jsx
+│
+├── store/                   # all global state
+│   ├── index.js             # combines all slices
+│   ├── boardSlice.js        # boards, columns, tasks, subtasks
+│   └── uiSlice.js           # sidebar open, active modal, theme
+│
+├── hooks/                   # custom hooks
+│   ├── useTheme.js          # toggle + system detection logic
+│   └── useBoard.js          # selectors for current board data
+│
+├── utils/
+│   └── helpers.js           # id generation, reorder logic etc
+│
+└── pages/
+    └── BoardPage.jsx        # top level page that wires everything
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```
