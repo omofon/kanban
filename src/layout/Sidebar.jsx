@@ -12,18 +12,18 @@ export default function Sidebar({
   return (
     <aside
       className="
-      w-[261px] lg:w-[300px] shrink-0
+      w-[261px] lg:w-[300px] shrink-0 py-8
       h-full bg-surface border-r border-edge
-      hidden md:flex flex-col justify-between
+      hidden md:flex flex-col justify-between items-start
     "
     >
       {/* Board list */}
-      <nav className="flex flex-col pt-4">
-        <p className="text-ink-muted px-6 lg:px-8 mb-4 tracking-[2.4px] text-xs font-bold uppercase">
+      <nav className="flex flex-col w-60 lg:w-69 ">
+        <p className="text-ink-muted px-6 lg:px-8 mb-4 heading-s uppercase">
           All Boards ({boards.length})
         </p>
 
-        <ul>
+        <ul className="w-full">
           {boards.map((board) => {
             const isActive = board.id === activeBoardId;
             return (
