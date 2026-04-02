@@ -3,37 +3,70 @@ import logoDark from "../assets/logo-dark.svg";
 import logoLight from "../assets/logo-light.svg";
 import logoMobile from "../assets/logo-mobile.svg";
 import ellipsis from "../assets/icon-vertical-ellipsis.svg";
+import downChevron from "../assets/icon-chevron-down.svg";
+import upChevron from "../assets/icon-chevron-up.svg";
+import Button from "../ui/Button";
+import { useState } from "react";
 
-function Header() {
+function Header({ boardName, onAddTask, hasColumns }) {
   const { isDark } = useTheme();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <header className="bg-surface fixed top-0 left-0 z-20 w-screen flex items-center justify-between h-16 md:h-20 lg:h-24">
-      <div className="border-0 md:border-r md:border-edge flex items-center w-fit md:w-65 lg:w-75 px-4 py-5 md:px-6 md:py-8 h-full">
-        <img
-          src={logoMobile}
-          alt="Kanban logo mobile"
-          className="md:hidden px-4 py-5"
-        />
+    <header className="bg-surface border-b border-edge w-full flex items-center justify-between h-16 md:h-20 lg:h-24 shrink-0">
+      {/* Logo area */}
+      <div className="flex items-center h-full px-4 md:px-6 md:w-[261px] lg:w-[300px] md:border-r md:border-edge shrink-0">
+        <img src={logoMobile} alt="Kanban" className="md:hidden" />
         <img
           src={isDark ? logoLight : logoDark}
           alt="Kanban"
           className="hidden md:block"
         />
       </div>
-      <nav className="flex flex-1 items-center justify-between px-8">
-        <h1 className="">No Active Boards</h1>
-        <div role="actions-buttons" className="flex items-center gap-6">
-          <button className="px-6 py-4 bg-brand rounded-full hover:cursor-pointer hover:bg-brand-hover flex items-center justify-center">
-            <h3>
-              <span className="relative top-[0.5px]">+</span> Add New Task
-            </h3>
-          </button>
-          <button>
-            <img src={ellipsis} alt="Ellipsis Icon" />
+      {/* Board name + actions */}
+      <nav className="flex flex-1 items-center justify-between px-4 md:px-6 lg:px-8">
+        {/* Mobile: tappable heading with caret */}
+        <button
+          className="relative flex items-center justify-start gap-1 md:hidden"
+          onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+        >
+          <span className="heading-l">{boardName ?? "No Active Board"}</span>
+          <img
+            src={isMobileMenuOpen ? upChevron : downChevron}
+            alt={isMobileMenuOpen ? "Collapse menu" : "Expand menu"}
+          />
+        </button>
+
+        {/* Tablet and above: static heading */}
+        <h1 className="hidden md:block md:heading-l lg:heading-xl">
+          {boardName ?? "No Active Board"}
+        </h1>
+
+        <div className="flex items-center gap-4 md:gap-6">
+          {/* Mobile: icon-only add button */}
+          <Button
+            onClick={onAddTask}
+            disabled={!hasColumns}
+            size="S"
+            className="md:hidden"
+          >
+            +
+          </Button>
+
+          {/* Tablet+: full add button */}
+          <Button
+            onClick={onAddTask}
+            disabled={!hasColumns}
+            className="hidden md:flex"
+          >
+            <span className="relative top-[0.5px]">+</span> Add New Task
+          </Button>
+
+          <button className="cursor-pointer p-1 rounded-full hover:bg-neutral-100">
+            <img src={ellipsis} alt="Board options" />
           </button>
         </div>
-      </nav>
+      </nav>{" "}
     </header>
   );
 }

@@ -64,31 +64,6 @@
     font-family: var(--font-jakarta);
   }
 
-  h1 {
-    font-size: 24px;
-    line-height: 30px;
-    font-weight: 700;
-  }
-
-  h2 {
-    font-size: 18px;
-    line-height: 23px;
-    font-weight: 700;
-  }
-
-  h3 {
-    font-size: 15px;
-    line-height: 19px;
-    font-weight: 700;
-  }
-
-  h4 {
-    font-size: 12px;
-    line-height: 15px;
-    font-weight: 700;
-    letter-spacing: 2.4px;
-  }
-
   p {
     font-size: 13px;
     line-height: 23px;
@@ -96,14 +71,52 @@
     color: var(--color-ink-muted);
   }
 
-  small {
-    font-size: 12px;
-    line-height: 15px;
-    font-weight: 700;
-  }
-
   * {
     border-color: var(--color-edge);
     box-sizing: border-box;
+  }
+}
+
+@layer components {
+  button {
+    @apply rounded-full cursor-pointer transition-colors duration-150;
+    @apply flex items-center justify-center gap-1;
+  }
+
+  .heading-xl {
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 30px;
+  }
+
+  .heading-l {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 23px;
+  }
+
+  .heading-m {
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 19px;
+  }
+
+  .heading-s {
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 15px;
+    letter-spacing: 2.4px;
+  }
+
+  .body-l {
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 23px;
+  }
+
+  .body-m {
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 15px;
   }
 }
