@@ -13,7 +13,7 @@ function Header({ boardName, onAddTask, hasColumns }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <header className="bg-surface border-b border-edge w-full flex items-center justify-between h-16 md:h-20 lg:h-24 shrink-0">
+    <header className="bg-surface w-full flex items-center justify-between h-16 md:h-20 lg:h-24 shrink-0">
       {/* Logo area */}
       <div className="flex items-center h-full px-4 md:px-6 md:w-[261px] lg:w-[300px] md:border-r md:border-edge shrink-0">
         <img src={logoMobile} alt="Kanban" className="md:hidden" />
@@ -24,7 +24,7 @@ function Header({ boardName, onAddTask, hasColumns }) {
         />
       </div>
       {/* Board name + actions */}
-      <nav className="flex flex-1 items-center justify-between px-4 md:px-6 lg:px-8">
+      <nav className="flex flex-1 items-center justify-between px-4 md:px-6 lg:px-8 h-full border-b border-edge">
         {/* Mobile: tappable heading with caret */}
         <button
           className="relative flex items-center justify-start gap-1 md:hidden"
@@ -38,7 +38,7 @@ function Header({ boardName, onAddTask, hasColumns }) {
         </button>
 
         {/* Tablet and above: static heading */}
-        <h1 className="hidden md:block md:heading-l lg:heading-xl">
+        <h1 className="hidden md:block heading-xl">
           {boardName ?? "No Active Board"}
         </h1>
 

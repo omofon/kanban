@@ -1,5 +1,6 @@
 import { useTheme } from "../hooks/useTheme";
-import BoardIcon from "../ui/BoardIcon";
+
+import iconBoard from "../assets/icon-board.svg";
 
 export default function Sidebar({
   boards,
@@ -8,6 +9,9 @@ export default function Sidebar({
   onCreateBoard,
 }) {
   const { isDark, toggle } = useTheme();
+  const boardIcon = (
+    <img src={iconBoard} alt="Board icon" className="w-4 h-4" />
+  );
 
   return (
     <aside
@@ -23,7 +27,7 @@ export default function Sidebar({
           All Boards ({boards.length})
         </p>
 
-        <ul className="w-full">
+        <ul className="w-full space-y-1">
           {boards.map((board) => {
             const isActive = board.id === activeBoardId;
             return (
@@ -31,8 +35,8 @@ export default function Sidebar({
                 <button
                   onClick={() => onSelectBoard(board.id)}
                   className={`
-                    w-full flex items-center gap-3
-                    h-12 pl-6 lg:pl-8 pr-6
+                    w-full flex items-center justify-start gap-4
+                    h-11 pl-6 lg:pl-8 pr-6
                     rounded-r-full cursor-pointer
                     transition-colors duration-150
                     ${
@@ -42,8 +46,8 @@ export default function Sidebar({
                     }
                   `}
                 >
-                  <BoardIcon active={isActive} />
-                  <span className="font-bold text-[15px]">{board.name}</span>
+                  {boardIcon}
+                  <span className="heading-m tracking-wide">{board.name}</span>
                 </button>
               </li>
             );
@@ -54,14 +58,14 @@ export default function Sidebar({
             <button
               onClick={onCreateBoard}
               className="
-                w-full flex items-center gap-3
-                h-12 pl-6 lg:pl-8 pr-6
+                w-full flex items-center justify-s gap-3
+                h-11 pl-6 lg:pl-8 pr-6
                 rounded-r-full cursor-pointer
-                text-brand font-bold text-[15px]
+                text-brand heading-m tracking-wide
                 hover:bg-brand-subtle transition-colors duration-150
               "
             >
-              <BoardIcon create />+ Create New Board
+              {boardIcon}+ Create New Board
             </button>
           </li>
         </ul>

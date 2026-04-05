@@ -2,6 +2,7 @@
   "boards": [
     {
       "name": "Platform Launch",
+      "id": "tr0923sj",
       "columns": [
         {
           "name": "Todo",
@@ -403,6 +404,7 @@
     },
     {
       "name": "Roadmap",
+      "id": "f89v023h",
       "columns": [
         {
           "name": "Now",

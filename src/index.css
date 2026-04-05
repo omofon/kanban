@@ -78,7 +78,7 @@
 }
 
 @layer components {
-  button {
+  .button {
     @apply rounded-full cursor-pointer transition-colors duration-150;
     @apply flex items-center justify-center gap-1;
   }
