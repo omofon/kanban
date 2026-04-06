@@ -20,12 +20,12 @@ export default function Sidebar({ isOpen, onHide }) {
   return (
     <aside
       className={`
-      w-65.25 lg:lg:w-75 shrink-0 py-8
-      h-full bg-surface border-r border-edge
-      hidden md:flex flex-col justify-between items-start
-      transition-transform duration-300 ease-in-out
-        ${isOpen ? "translate-x-0" : "-translate-x-full"}
-    `}
+    shrink-0 py-8
+    h-full bg-surface border-r border-edge
+    hidden md:flex flex-col justify-between items-start
+    transition-all duration-300 ease-in-out
+    ${isOpen ? "w-65.25 lg:w-75" : "w-0 overflow-hidden border-r-0"}
+  `}
     >
       {/* Board list */}
       <nav className="flex flex-col w-60 lg:w-69 ">
