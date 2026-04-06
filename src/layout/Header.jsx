@@ -1,14 +1,16 @@
+import { useState } from "react";
+
 import { useTheme } from "../hooks/useTheme";
+import Button from "../ui/Button";
+import MobileMenu from "../ui/MobileMenu";
+import { useBoard } from "../context/BoardContext";
+
 import logoDark from "../assets/logo-dark.svg";
 import logoLight from "../assets/logo-light.svg";
 import logoMobile from "../assets/logo-mobile.svg";
 import ellipsis from "../assets/icon-vertical-ellipsis.svg";
 import downChevron from "../assets/icon-chevron-down.svg";
 import upChevron from "../assets/icon-chevron-up.svg";
-import Button from "../ui/Button";
-import { useState } from "react";
-import { useBoard } from "../context/BoardContext";
-import MobileMenu from "../ui/MobileMenu";
 
 function Header({ isSidebarOpen, onHide }) {
   const { isDark } = useTheme();
@@ -21,10 +23,11 @@ function Header({ isSidebarOpen, onHide }) {
       {/* Logo area */}
       <div
         className={`flex items-center h-full px-4 md:px-6 
-          md:w-65.25 lg:lg:w-75 
-          md:border-r md:border-edge shrink-0
+          md:w-65.25 lg:w-75 
+          shrink-0 border-b
           transition-transform duration-300 ease-in-out
-           ${!isSidebarOpen ? "border-b" : ""}`}
+          md:border-r md:border-edge
+          ${isSidebarOpen ? "md:border-b-0" : "md:border-b"}`}
       >
         <img src={logoMobile} alt="Kanban" className="md:hidden" />
         <img
