@@ -25,7 +25,7 @@ export default function Sidebar({
   return (
     <aside
       className={`
-      w-[261px] lg:w-[300px] shrink-0 py-8
+      w-65.25 lg:lg:w-75 shrink-0 py-8
       h-full bg-surface border-r border-edge
       hidden md:flex flex-col justify-between items-start
       transition-transform duration-300 ease-in-out
