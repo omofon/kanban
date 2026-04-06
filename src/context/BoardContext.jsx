@@ -11,7 +11,7 @@ export default function BoardProvider({ children }) {
 
   useEffect(() => {
     localStorage.setItem("boards", JSON.stringify(data.boards));
-  }, [data.boards]);
+  }, [boards]);
 
   const activeBoard = boards.find((board) => board.id === activeBoardId);
   const hasColumns = activeBoard?.columns?.length > 0;

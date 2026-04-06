@@ -1,17 +1,12 @@
 import { useTheme } from "../hooks/useTheme";
+import { useBoard } from "../context/BoardContext";
 
 import iconMoon from "../assets/icon-dark-theme.svg";
 import iconSun from "../assets/icon-light-theme.svg";
 
-export default function Sidebar({
-  isOpen,
-  onHide,
-  boards,
-  activeBoardId,
-  onSelectBoard,
-  onCreateBoard,
-}) {
+export default function Sidebar({ isOpen, onHide }) {
   const { isDark, toggle } = useTheme();
+  const { boards, activeBoardId, setActiveBoardId } = useBoard();
 
   const boardIcon = (
     <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg">
@@ -44,7 +39,7 @@ export default function Sidebar({
             return (
               <li key={board.id}>
                 <button
-                  onClick={() => onSelectBoard(board.id)}
+                  onClick={() => setActiveBoardId(board.id)}
                   className={`
                     w-full flex items-center justify-start gap-4
                     h-11 pl-6 lg:pl-8 pr-6
@@ -63,7 +58,7 @@ export default function Sidebar({
           {/* Create new board */}
           <li>
             <button
-              onClick={onCreateBoard}
+              onClick={() => {}}
               className="
                 w-full flex items-center justify-s gap-3
                 h-11 pl-6 lg:pl-8 pr-6

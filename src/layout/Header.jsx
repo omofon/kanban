@@ -7,10 +7,14 @@ import downChevron from "../assets/icon-chevron-down.svg";
 import upChevron from "../assets/icon-chevron-up.svg";
 import Button from "../ui/Button";
 import { useState } from "react";
+import { useBoard } from "../context/BoardContext";
+import MobileMenu from "../ui/MobileMenu";
 
-function Header({ isSidebarOpen, boardName, onAddTask, hasColumns }) {
+function Header({ isSidebarOpen, onHide }) {
   const { isDark } = useTheme();
+  const { activeBoard, hasColumns } = useBoard();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const boardName = activeBoard?.name;
 
   return (
     <header className="bg-surface w-full flex items-center justify-between h-16 md:h-20 lg:h-24 shrink-0">
@@ -43,6 +47,11 @@ function Header({ isSidebarOpen, boardName, onAddTask, hasColumns }) {
           />
         </button>
 
+        <MobileMenu
+          isOpen={isMobileMenuOpen}
+          onClose={() => setIsMobileMenuOpen(false)}
+        />
+
         {/* Tablet and above: static heading */}
         <h1 className="hidden md:block heading-xl">
           {boardName ?? "No Active Board"}
@@ -51,7 +60,7 @@ function Header({ isSidebarOpen, boardName, onAddTask, hasColumns }) {
         <div className="flex items-center gap-4 md:gap-6">
           {/* Mobile: icon-only add button */}
           <Button
-            onClick={onAddTask}
+            onClick={() => {}}
             disabled={!hasColumns}
             size="S"
             className="md:hidden"
@@ -61,7 +70,7 @@ function Header({ isSidebarOpen, boardName, onAddTask, hasColumns }) {
 
           {/* Tablet+: full add button */}
           <Button
-            onClick={onAddTask}
+            onClick={() => {}}
             disabled={!hasColumns}
             className="hidden md:flex"
           >
