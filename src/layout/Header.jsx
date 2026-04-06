@@ -11,12 +11,15 @@ import logoMobile from "../assets/logo-mobile.svg";
 import ellipsis from "../assets/icon-vertical-ellipsis.svg";
 import downChevron from "../assets/icon-chevron-down.svg";
 import upChevron from "../assets/icon-chevron-up.svg";
+import ActionMenu from "../ui/ActionMenu";
 
 function Header({ isSidebarOpen, onHide }) {
   const { isDark } = useTheme();
   const { activeBoard, hasColumns } = useBoard();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const boardName = activeBoard?.name;
+
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isActionMenuOpen, setIsActionMenuOpen] = useState(false);
 
   return (
     <header className="bg-surface w-full flex items-center justify-between h-16 md:h-20 lg:h-24 shrink-0">
@@ -50,6 +53,7 @@ function Header({ isSidebarOpen, onHide }) {
           />
         </button>
 
+        {/* Mobile Dropdown Menu */}
         <MobileMenu
           isOpen={isMobileMenuOpen}
           onClose={() => setIsMobileMenuOpen(false)}
@@ -80,9 +84,18 @@ function Header({ isSidebarOpen, onHide }) {
             <span className="relative top-[0.5px]">+</span> Add New Task
           </Button>
 
-          <button className="cursor-pointer p-1 rounded-full">
+          <button
+            onClick={() => setIsActionMenuOpen(true)}
+            className="cursor-pointer p-1 rounded-full"
+          >
             <img src={ellipsis} alt="Board options" />
           </button>
+
+          {/* Action Menu */}
+          <ActionMenu
+            isOpen={isActionMenuOpen}
+            onClose={() => setIsActionMenuOpen(false)}
+          />
         </div>
       </nav>{" "}
     </header>

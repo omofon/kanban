@@ -28,7 +28,7 @@ export default function MobileMenu({ isOpen, onClose }) {
       />
 
       {/* Panel */}
-      <section className="fixed top-20 left-1/2 -translate-x-1/2 w-66 bg-surface rounded-md z-50 py-4 md:hidden shadow-lg">
+      <section className="fixed top-20 left-1/2 -translate-x-1/2 w-66 bg-surface rounded-lg z-50 py-4 md:hidden shadow-lg">
         {/* Board List */}
         <nav className="flex flex-col w-60">
           <p className="text-ink-muted px-6 mb-4 heading-s uppercase">
