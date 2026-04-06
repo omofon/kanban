@@ -17,7 +17,7 @@ function Header({ isSidebarOpen, boardName, onAddTask, hasColumns }) {
       {/* Logo area */}
       <div
         className={`flex items-center h-full px-4 md:px-6 
-          md:w-[261px] lg:w-[300px] 
+          md:w-65.25 lg:lg:w-75 
           md:border-r md:border-edge shrink-0
           transition-transform duration-300 ease-in-out
            ${!isSidebarOpen ? "border-b" : ""}`}
