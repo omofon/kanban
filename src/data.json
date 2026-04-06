@@ -459,6 +459,11 @@
           "tasks": []
         }
       ]
+    },
+    {
+      "name": "Sample",
+      "id": "boib898bf",
+      "columns": []
     }
   ]
 }
