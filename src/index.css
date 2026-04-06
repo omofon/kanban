@@ -45,6 +45,9 @@
   --color-danger: var(--color-red);
   --color-danger-hover: var(--color-red-hover);
   --color-danger-subtle: hsl(0 78% 95%);
+
+  /* Sidebar Button */
+  --color-menu-hover: var(--color-lines-light);
 }
 
 /* ── Dark mode overrides ── */
@@ -54,6 +57,7 @@
   --color-modal: var(--color-lines-dark);
   --color-edge: var(--color-lines-dark);
   --color-ink: var(--color-white);
+  --color-menu-hover: var(--color-white);
 }
 
 /* ── Base styles ── */

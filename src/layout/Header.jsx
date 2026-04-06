@@ -8,14 +8,20 @@ import upChevron from "../assets/icon-chevron-up.svg";
 import Button from "../ui/Button";
 import { useState } from "react";
 
-function Header({ boardName, onAddTask, hasColumns }) {
+function Header({ isSidebarOpen, boardName, onAddTask, hasColumns }) {
   const { isDark } = useTheme();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
     <header className="bg-surface w-full flex items-center justify-between h-16 md:h-20 lg:h-24 shrink-0">
       {/* Logo area */}
-      <div className="flex items-center h-full px-4 md:px-6 md:w-[261px] lg:w-[300px] md:border-r md:border-edge shrink-0">
+      <div
+        className={`flex items-center h-full px-4 md:px-6 
+          md:w-[261px] lg:w-[300px] 
+          md:border-r md:border-edge shrink-0
+          transition-transform duration-300 ease-in-out
+           ${!isSidebarOpen ? "border-b" : ""}`}
+      >
         <img src={logoMobile} alt="Kanban" className="md:hidden" />
         <img
           src={isDark ? logoLight : logoDark}
@@ -62,7 +68,7 @@ function Header({ boardName, onAddTask, hasColumns }) {
             <span className="relative top-[0.5px]">+</span> Add New Task
           </Button>
 
-          <button className="cursor-pointer p-1 rounded-full hover:bg-neutral-100">
+          <button className="cursor-pointer p-1 rounded-full">
             <img src={ellipsis} alt="Board options" />
           </button>
         </div>

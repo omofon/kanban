@@ -1,10 +1,13 @@
 import { useState } from "react";
 import Header from "../src/layout/Header";
 import Sidebar from "../src/layout/Sidebar";
+
 import data from "./data.json";
+import ShowSidebarButton from "./ui/ShowSidebarButton";
 
 export default function App() {
   const [activeBoardId, setActiveBoardId] = useState(data.boards[0]?.id);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const activeBoard = data.boards.find((b) => b.id === activeBoardId);
   const hasColumns = activeBoard?.columns?.length > 0;
@@ -12,6 +15,7 @@ export default function App() {
   return (
     <div className="flex flex-col h-screen overflow-hidden">
       <Header
+        isSidebarOpen={isSidebarOpen}
         boardName={activeBoard?.name}
         onAddTask={() => {}}
         hasColumns={hasColumns}
@@ -19,6 +23,8 @@ export default function App() {
 
       <main className="flex flex-1 overflow-hidden">
         <Sidebar
+          isOpen={isSidebarOpen}
+          onHide={() => setIsSidebarOpen(false)}
           boards={data.boards}
           activeBoardId={activeBoardId}
           onSelectBoard={setActiveBoardId}
@@ -26,7 +32,11 @@ export default function App() {
         />
 
         {/* Board canvas */}
-        <div className="flex-1 bg-canvas overflow-auto p-6">
+        <section className="flex-1 bg-canvas overflow-auto p-6">
+          <ShowSidebarButton
+            isSidebarOpen={isSidebarOpen}
+            onShow={() => setIsSidebarOpen(true)}
+          />
           {!hasColumns && (
             <div className="h-full flex flex-col items-center justify-center gap-6">
               <p className="text-ink-muted text-lg font-bold text-center">
@@ -37,7 +47,7 @@ export default function App() {
               </button>
             </div>
           )}
-        </div>
+        </section>
       </main>
     </div>
   );
