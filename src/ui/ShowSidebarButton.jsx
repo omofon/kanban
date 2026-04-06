@@ -2,7 +2,7 @@ export default function ShowSidebarButton({ isSidebarOpen, onShow }) {
   return (
     <button
       className={`fixed bottom-8 left-0 w-14 h-12 rounded-r-full 
-        flex justify-center items-center 
+        hidden md:flex justify-center items-center 
         bg-brand hover:bg-brand-hover text-ink-white cursor-pointer 
         transition-all duration-300 ease-in-out
         ${isSidebarOpen ? "opacity-0 pointer-events-none -translate-x-full" : "opacity-100 translate-x-0"}`}
