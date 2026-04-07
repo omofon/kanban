@@ -16,6 +16,36 @@ export default function BoardProvider({ children }) {
   const activeBoard = boards.find((board) => board.id === activeBoardId);
   const hasColumns = activeBoard?.columns?.length > 0;
 
+  const moveTask = (taskId, newStatus) => {
+    setBoards((prev) =>
+      prev.map((board) => {
+        if (board.id !== activeBoard.id) return board;
+
+        let taskToMove = null;
+
+        // Remove task from its current column
+        const updatedColumns = board.columns.map((col) => {
+          const found = col.tasks.find((t) => t.id === taskId);
+          if (found) {
+            taskToMove = { ...found, status: newStatus };
+            return { ...col, tasks: col.tasks.filter((t) => t.id !== taskId) };
+          }
+          return col;
+        });
+
+        // Insert task into the matching column
+        return {
+          ...board,
+          columns: updatedColumns.map((col) =>
+            col.name === newStatus
+              ? { ...col, tasks: [...col.tasks, taskToMove] }
+              : col,
+          ),
+        };
+      }),
+    );
+  };
+
   return (
     <BoardContext.Provider
       value={{
@@ -24,6 +54,7 @@ export default function BoardProvider({ children }) {
         activeBoardId,
         hasColumns,
         setActiveBoardId,
+        moveTask,
       }}
     >
       {children}
