@@ -78,7 +78,7 @@ export default function MobileMenu({ isOpen, onClose }) {
             <span
               className={`absolute top-0.75 w-3.5 h-3.5 bg-white rounded-full
               transition-transform duration-200
-              ${isDark ? "-translate-x-4.25" : "translate-x-0.75"}`}
+              ${isDark ? "translate-x-0.75" : "-translate-x-4.25"}`}
             />
           </button>
           <img src={iconMoon} alt="Dark theme" />
