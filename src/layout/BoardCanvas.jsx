@@ -1,7 +1,11 @@
+import { useState } from "react";
 import { useBoard } from "../context/BoardContext";
+import ViewTask from "../modals/ViewTask";
 
 export default function BoardCanvas() {
   const { activeBoard, hasColumns } = useBoard();
+  const [isViewTaskOpen, setIsViewTaskOpen] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
 
   const columnIcon = {
     Todo: "bg-todo",
@@ -32,7 +36,13 @@ export default function BoardCanvas() {
               <ul className="flex flex-col gap-5 w-full">
                 {column.tasks.map((task) => (
                   <li key={task.id}>
-                    <button className="bg-surface w-full px-4 py-6 rounded-lg shadow-lg flex flex-col gap-2 text-left cursor-pointer group">
+                    <button
+                      onClick={() => {
+                        setIsViewTaskOpen(true);
+                        setSelectedTask(task);
+                      }}
+                      className="bg-surface w-full px-4 py-6 rounded-lg shadow-lg flex flex-col gap-2 text-left cursor-pointer group"
+                    >
                       <span className="heading-m text-ink group-hover:text-brand transition-colors duration-150">
                         {task.title}
                       </span>
@@ -47,6 +57,17 @@ export default function BoardCanvas() {
                   </li>
                 ))}
               </ul>
+
+              {selectedTask && (
+                <ViewTask
+                  isOpen={isViewTaskOpen}
+                  onClose={() => {
+                    setIsViewTaskOpen(false);
+                    setSelectedTask(null);
+                  }}
+                  task={selectedTask}
+                />
+              )}
             </section>
           ))}
           {/* New Column Button */}

@@ -4,7 +4,8 @@ import ellipsis from "../assets/icon-vertical-ellipsis.svg";
 import { useState } from "react";
 
 export default function ViewTask({ isOpen, onClose, task }) {
-  const { activeBoard } = useBoard();
+  const { activeBoard, moveTask } = useBoard();
+  const [status, setStatus] = useState(task.status);
   const [subtasks, setSubtasks] = useState(task.subtasks);
 
   if (!isOpen) return null;
@@ -21,6 +22,12 @@ export default function ViewTask({ isOpen, onClose, task }) {
           : subtask,
       ),
     );
+  };
+
+  const handleStatusChange = (e) => {
+    const newStatus = e.target.value;
+    setStatus(newStatus);
+    moveTask(task.id, newStatus);
   };
 
   return (
@@ -82,7 +89,24 @@ export default function ViewTask({ isOpen, onClose, task }) {
             ))}
           </ul>
         </section>
-        
+
+        {/* Current Status */}
+        <section className="w-full flex flex-col gap-2">
+          <span className="body-m text-ink-muted">Current Status</span>
+
+          <select
+            value={status}
+            onChange={handleStatusChange}
+            className="w-full bg-surface border border-edge     rounded-lg px-4 py-3 body-l text-ink
+                cursor-pointer outline-none focus:border-brand appearance-none"
+          >
+            {activeBoard.columns.map((column) => (
+              <option key={column.id} value={column.name}>
+                {column.name}
+              </option>
+            ))}
+          </select>
+        </section>
       </article>
     </div>
   );
