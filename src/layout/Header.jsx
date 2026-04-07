@@ -3,6 +3,8 @@ import { useState } from "react";
 import { useTheme } from "../hooks/useTheme";
 import Button from "../ui/Button";
 import MobileMenu from "../ui/MobileMenu";
+import ActionMenu from "../ui/ActionMenu";
+
 import { useBoard } from "../context/BoardContext";
 
 import logoDark from "../assets/logo-dark.svg";
@@ -11,7 +13,7 @@ import logoMobile from "../assets/logo-mobile.svg";
 import ellipsis from "../assets/icon-vertical-ellipsis.svg";
 import downChevron from "../assets/icon-chevron-down.svg";
 import upChevron from "../assets/icon-chevron-up.svg";
-import ActionMenu from "../ui/ActionMenu";
+import addTaskIcon from "../assets/icon-add-task-mobile.svg";
 
 function Header({ isSidebarOpen, onHide }) {
   const { isDark } = useTheme();
@@ -69,10 +71,10 @@ function Header({ isSidebarOpen, onHide }) {
           <Button
             onClick={() => {}}
             disabled={!hasColumns}
-            size="S"
+            size="XS"
             className="md:hidden"
           >
-            +
+            <img src={addTaskIcon} alt="Add task" />
           </Button>
 
           {/* Tablet+: full add button */}
