@@ -46,6 +46,31 @@ export default function BoardProvider({ children }) {
     );
   };
 
+  const toggleSubtask = (taskId, subtaskIndex) => {
+    setBoards((prev) =>
+      prev.map((board) => {
+        if (board.id !== activeBoard.id) return board;
+        return {
+          ...board,
+          columns: board.columns.map((col) => ({
+            ...col,
+            tasks: col.tasks.map((task) => {
+              if (task.id !== taskId) return task;
+              return {
+                ...task,
+                subtasks: task.subtasks.map((subtask, i) =>
+                  i === subtaskIndex
+                    ? { ...subtask, isCompleted: !subtask.isCompleted }
+                    : subtask,
+                ),
+              };
+            }),
+          })),
+        };
+      }),
+    );
+  };
+
   return (
     <BoardContext.Provider
       value={{
@@ -55,6 +80,7 @@ export default function BoardProvider({ children }) {
         hasColumns,
         setActiveBoardId,
         moveTask,
+        toggleSubtask,
       }}
     >
       {children}
