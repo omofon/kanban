@@ -10,7 +10,7 @@ export default function BoardProvider({ children }) {
   const [activeBoardId, setActiveBoardId] = useState(boards[0]?.id);
 
   useEffect(() => {
-    localStorage.setItem("boards", JSON.stringify(data.boards));
+    localStorage.setItem("boards", JSON.stringify(boards));
   }, [boards]);
 
   const activeBoard = boards.find((board) => board.id === activeBoardId);
@@ -70,6 +70,21 @@ export default function BoardProvider({ children }) {
       }),
     );
   };
+
+  // const autoSortTask = () => {
+  //   activeBoard.columns.forEach((column) => {
+  //     column.fund((task) => {
+  //       const completed = task.subtasks.filter(
+  //         (subtask) => subtask.isCompleted,
+  //       ).length;
+  //       const total = task.subtasks.length;
+
+  //       if (completed === 0) return moveTask(task?.id, column?.[0].name);
+  //       if (completed === total) return moveTask(task?.id, column.at(-1)?.name);
+  //       return;
+  //     });
+  //   });
+  // };
 
   return (
     <BoardContext.Provider

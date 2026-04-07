@@ -50,7 +50,7 @@ export default function BoardCanvas() {
                         {
                           task.subtasks.filter((subtask) => subtask.isCompleted)
                             .length
-                        }
+                        }{" "}
                         of {task.subtasks.length} subtasks
                       </span>
                     </button>

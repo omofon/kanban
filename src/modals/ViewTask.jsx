@@ -1,16 +1,27 @@
 import { useBoard } from "../context/BoardContext";
+
 import { useState } from "react";
 
 export default function ViewTask({ isOpen, onClose, task }) {
   const { activeBoard, moveTask, toggleSubtask } = useBoard();
   const [status, setStatus] = useState(task.status);
+  const [subtasks, setSubtasks] = useState(task.subtasks);
 
   if (!isOpen) return null;
 
-  const completedCount = task.subtasks.filter((s) => s.isCompleted).length;
+  const completedCount = subtasks.filter(
+    (subtask) => subtask.isCompleted,
+  ).length;
 
   const handleToggle = (index) => {
     toggleSubtask(task.id, index);
+    setSubtasks((prev) =>
+      prev.map((subtask, i) =>
+        i === index
+          ? { ...subtask, isCompleted: !subtask.isCompleted }
+          : subtask,
+      ),
+    );
   };
 
   const handleStatusChange = (e) => {
@@ -38,7 +49,7 @@ export default function ViewTask({ isOpen, onClose, task }) {
             className="cursor-pointer p-1 rounded-full"
           >
             <svg width="5" height="20" xmlns="http://www.w3.org/2000/svg">
-              <g fill="#828FA3" fillRule="evenodd">
+              <g fill="#828FA3" fill-rule="evenodd">
                 <circle cx="2.308" cy="2.308" r="2.308" />
                 <circle cx="2.308" cy="10" r="2.308" />
                 <circle cx="2.308" cy="17.692" r="2.308" />
@@ -48,29 +59,27 @@ export default function ViewTask({ isOpen, onClose, task }) {
         </div>
 
         {/* Description */}
-        {task.description && (
-          <span className="body-l text-ink-muted">{task.description}</span>
-        )}
+        <span className="body-l text-ink-muted">{task.description}</span>
 
         {/* Subtasks */}
-        <section className="w-full flex flex-col gap-4">
-          <span className="body-m text-ink-muted">
+        <section className="w-full flex flex-col">
+          <span className="body-m text-ink mb-4">
             Subtasks ({completedCount} of {task.subtasks.length})
           </span>
           <ul className="flex flex-col gap-2">
-            {task.subtasks.map((subtask, index) => (
+            {subtasks.map((subtask, index) => (
               <li
                 key={index}
                 onClick={() => handleToggle(index)}
-                className="flex items-center gap-4 bg-canvas p-3 rounded-md cursor-pointer
-                hover:bg-brand/25 transition-colors"
+                className="flex items-center gap-4 bg-canvas p-3 rounded cursor-pointer hover:bg-brand-hover transition-colors"
               >
                 <input
                   type="checkbox"
+                  name={subtask.title}
                   checked={subtask.isCompleted}
                   onChange={() => handleToggle(index)}
                   onClick={(e) => e.stopPropagation()}
-                  className="w-4 h-4 accent-brand cursor-pointer shrink-0"
+                  className="w-4 h-4 accent-brand cursor-pointer"
                 />
                 <span
                   className={`body-m transition-all ${
@@ -114,11 +123,10 @@ export default function ViewTask({ isOpen, onClose, task }) {
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M1 1l4 4 4-4"
                 stroke="#635FC7"
-                strokeWidth="2"
+                stroke-width="2"
                 fill="none"
-                fillRule="evenodd"
+                d="m1 1 4 4 4-4"
               />
             </svg>
           </div>
