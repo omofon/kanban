@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import data from "../data.json";
+import { generateId } from "../utils";
 
 const BoardContext = createContext();
 
@@ -16,6 +17,149 @@ export default function BoardProvider({ children }) {
   const activeBoard = boards.find((board) => board.id === activeBoardId);
   const hasColumns = activeBoard?.columns?.length > 0;
 
+  // --- Board functions --- //
+
+  const addBoard = (newBoard = {}) => {
+    setBoards((prev) => {
+      if (prev.length >= 10) return prev;
+      if (prev.some((board) => board.name === newBoard.name)) return prev;
+
+      return [...prev, newBoard];
+    });
+  };
+
+  const updateBoard = (updatedFields) => {
+    setBoards((prev) =>
+      prev.map((board) =>
+        board.id !== activeBoardId ? board : { ...board, ...updatedFields },
+      ),
+    );
+  };
+
+  const deleteBoard = () => {
+    setBoards((prev) => prev.filter((board) => board.id !== activeBoardId));
+
+    // Switch active board to first remaining board after deletion
+    setActiveBoardId((prev) => {
+      const remaining = boards.filter((board) => board.id !== activeBoardId);
+      return remaining[0]?.id ?? null;
+    });
+  };
+
+  // --- Column functions --- //
+
+  const addColumn = (columnName) => {
+    setBoards((prev) =>
+      prev.map((board) => {
+        if (board.id !== activeBoardId) return board;
+        return {
+          ...board,
+          columns: [
+            ...(board.columns ?? []),
+            { name: columnName, id: generateId(6), tasks: [] },
+          ],
+        };
+      }),
+    );
+  };
+
+  // --- Task functions --- //
+
+  const addTask = (newTitle, newDescription, newStatus, newSubtasks) => {
+    setBoards((prev) =>
+      prev.map((board) => {
+        if (board.id !== activeBoardId) return board;
+        return {
+          ...board,
+          columns: board.columns.map((column) => {
+            if (column.name !== newStatus) return column;
+            return {
+              ...column,
+              tasks: [
+                ...column.tasks,
+                {
+                  title: newTitle,
+                  description: newDescription,
+                  status: newStatus,
+                  id: generateId(),
+                  subtasks: newSubtasks.map((subtaskTitle) => ({
+                    title: subtaskTitle,
+                    isCompleted: false,
+                  })),
+                },
+              ],
+            };
+          }),
+        };
+      }),
+    );
+  };
+
+  const updateTask = (
+    taskId,
+    newTitle,
+    newDescription,
+    newStatus,
+    newSubtasks,
+  ) => {
+    setBoards((prev) =>
+      prev.map((board) => {
+        if (board.id !== activeBoardId) return board;
+        return {
+          ...board,
+          columns: board.columns.map((column) => ({
+            ...column,
+            tasks: column.tasks.map((task) => {
+              if (task.id !== taskId) return task;
+              return {
+                ...task,
+                title: newTitle,
+                description: newDescription,
+                status: newStatus,
+                subtasks: newSubtasks.map((subtaskTitle) => {
+                  const existing = task.subtasks.find(
+                    (s) => s.title === subtaskTitle,
+                  );
+                  return {
+                    title: subtaskTitle,
+                    isCompleted: existing ? existing.isCompleted : false,
+                  };
+                }),
+              };
+            }),
+          })),
+        };
+      }),
+    );
+
+    // If the status changed, relocate the task to its new column.
+    const currentTask = activeBoard?.columns
+      .flatMap((col) => col.tasks)
+      .find((t) => t.id === taskId);
+
+    if (currentTask && currentTask.status !== newStatus) {
+      moveTask(taskId, newStatus);
+    }
+  };
+
+  const deleteTask = (columnId, taskId) => {
+    setBoards((prev) =>
+      prev.map((board) => {
+        if (board.id !== activeBoard.id) return board;
+        return {
+          ...board,
+          columns: board.columns.map((column) => {
+            if (column.id !== columnId) return column;
+            return {
+              ...column,
+              tasks: column.tasks.filter((task) => task.id !== taskId),
+            };
+          }),
+        };
+      }),
+    );
+  };
+
   const moveTask = (taskId, newStatus) => {
     setBoards((prev) =>
       prev.map((board) => {
@@ -23,7 +167,6 @@ export default function BoardProvider({ children }) {
 
         let taskToMove = null;
 
-        // Remove task from its current column
         const updatedColumns = board.columns.map((col) => {
           const found = col.tasks.find((t) => t.id === taskId);
           if (found) {
@@ -33,7 +176,8 @@ export default function BoardProvider({ children }) {
           return col;
         });
 
-        // Insert task into the matching column
+        if (!taskToMove) return board;
+
         return {
           ...board,
           columns: updatedColumns.map((col) =>
@@ -71,21 +215,6 @@ export default function BoardProvider({ children }) {
     );
   };
 
-  // const autoSortTask = () => {
-  //   activeBoard.columns.forEach((column) => {
-  //     column.fund((task) => {
-  //       const completed = task.subtasks.filter(
-  //         (subtask) => subtask.isCompleted,
-  //       ).length;
-  //       const total = task.subtasks.length;
-
-  //       if (completed === 0) return moveTask(task?.id, column?.[0].name);
-  //       if (completed === total) return moveTask(task?.id, column.at(-1)?.name);
-  //       return;
-  //     });
-  //   });
-  // };
-
   return (
     <BoardContext.Provider
       value={{
@@ -94,6 +223,13 @@ export default function BoardProvider({ children }) {
         activeBoardId,
         hasColumns,
         setActiveBoardId,
+        addBoard,
+        updateBoard,
+        deleteBoard,
+        addColumn,
+        addTask,
+        updateTask,
+        deleteTask,
         moveTask,
         toggleSubtask,
       }}
