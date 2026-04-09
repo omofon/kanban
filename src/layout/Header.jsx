@@ -1,11 +1,12 @@
 import { useState } from "react";
 
 import { useTheme } from "../hooks/useTheme";
+import { useBoard } from "../context/BoardContext";
+import { useUI } from "../context/UIContext";
+
 import Button from "../ui/Button";
 import MobileMenu from "../ui/MobileMenu";
 import ActionMenu from "../ui/ActionMenu";
-
-import { useBoard } from "../context/BoardContext";
 
 import logoDark from "../assets/logo-dark.svg";
 import logoLight from "../assets/logo-light.svg";
@@ -14,16 +15,15 @@ import ellipsis from "../assets/icon-vertical-ellipsis.svg";
 import downChevron from "../assets/icon-chevron-down.svg";
 import upChevron from "../assets/icon-chevron-up.svg";
 import addTaskIcon from "../assets/icon-add-task-mobile.svg";
-import AddTask from "../modals/AddTask";
 
-function Header({ isSidebarOpen, onHide }) {
+function Header({ isSidebarOpen }) {
   const { isDark } = useTheme();
   const { activeBoard, hasColumns } = useBoard();
+  const { openModal } = useUI();
   const boardName = activeBoard?.name;
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isActionMenuOpen, setIsActionMenuOpen] = useState(false);
-  const [isAddTaskOpen, setIsAddTaskOpen] = useState(false);
 
   return (
     <header className="bg-surface w-full flex items-center justify-between h-16 md:h-20 lg:h-24 shrink-0">
@@ -71,7 +71,7 @@ function Header({ isSidebarOpen, onHide }) {
         <div className="flex items-center gap-4 md:gap-6">
           {/* Mobile: icon-only add button */}
           <Button
-            onClick={() => setIsAddTaskOpen(true)}
+            onClick={() => openModal("addTask")}
             disabled={!hasColumns}
             size="XS"
             className="md:hidden"
@@ -81,7 +81,7 @@ function Header({ isSidebarOpen, onHide }) {
 
           {/* Tablet+: full add button */}
           <Button
-            onClick={() => setIsAddTaskOpen(true)}
+            onClick={() => openModal("addTask")}
             disabled={!hasColumns}
             className="hidden md:flex"
           >

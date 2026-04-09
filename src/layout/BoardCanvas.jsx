@@ -1,11 +1,9 @@
-import { useState } from "react";
 import { useBoard } from "../context/BoardContext";
-import ViewTask from "../modals/ViewTask";
+import { useUI } from "../context/UIContext";
 
 export default function BoardCanvas() {
   const { activeBoard, hasColumns } = useBoard();
-  const [isViewTaskOpen, setIsViewTaskOpen] = useState(false);
-  const [selectedTask, setSelectedTask] = useState(null);
+  const { openModal } = useUI();
 
   const columnIcon = {
     Todo: "bg-todo",
@@ -37,10 +35,7 @@ export default function BoardCanvas() {
                 {column.tasks.map((task) => (
                   <li key={task.id}>
                     <button
-                      onClick={() => {
-                        setIsViewTaskOpen(true);
-                        setSelectedTask(task);
-                      }}
+                      onClick={() => openModal("viewTask", { task })}
                       className="bg-surface w-full px-4 py-6 rounded-lg shadow-lg flex flex-col gap-2 text-left cursor-pointer group"
                     >
                       <span className="heading-m text-ink group-hover:text-brand transition-colors duration-150">
@@ -57,21 +52,12 @@ export default function BoardCanvas() {
                   </li>
                 ))}
               </ul>
-
-              {selectedTask && (
-                <ViewTask
-                  isOpen={isViewTaskOpen}
-                  onClose={() => {
-                    setIsViewTaskOpen(false);
-                    setSelectedTask(null);
-                  }}
-                  task={selectedTask}
-                />
-              )}
             </section>
           ))}
+
           {/* New Column Button */}
           <button
+            // onClick={() => openModal("addColumn")}
             className="w-70 shrink-0 my-10 rounded-lg cursor-pointer
                 flex items-center justify-center
               bg-lines-light dark:bg-lines-dark
@@ -85,7 +71,10 @@ export default function BoardCanvas() {
           <p className="text-ink-muted text-lg font-bold text-center">
             This board is empty. Create a new column to get started.
           </p>
-          <button className="px-6 py-4 bg-brand hover:bg-brand-hover text-ink-white font-bold rounded-full transition-colors cursor-pointer">
+          <button
+            // onClick={() => openModal("addColumn")}
+            className="px-6 py-4 bg-brand hover:bg-brand-hover text-ink-white font-bold rounded-full transition-colors cursor-pointer"
+          >
             + Add New Column
           </button>
         </div>

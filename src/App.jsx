@@ -18,7 +18,6 @@ export default function App() {
         <div className="flex flex-col h-screen overflow-hidden">
           <Header
             isSidebarOpen={isSidebarOpen}
-            onHide={() => setIsSidebarOpen(false)}
           />
           <main className="flex flex-1 overflow-hidden">
             <Sidebar
