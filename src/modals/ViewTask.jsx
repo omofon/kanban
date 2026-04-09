@@ -6,6 +6,7 @@ export default function ViewTask({ isOpen, onClose, task }) {
   const { activeBoard, moveTask, toggleSubtask } = useBoard();
   const [status, setStatus] = useState(task.status);
   const [subtasks, setSubtasks] = useState(task.subtasks);
+  const [isActionMenuOpen, setIsActionMenu] = useState(false);
 
   if (!isOpen) return null;
 
@@ -44,18 +45,47 @@ export default function ViewTask({ isOpen, onClose, task }) {
         {/* Title */}
         <div className="w-full flex gap-6 items-center justify-between">
           <span className="heading-l text-ink">{task.title}</span>
-          <button
-            onClick={() => {}}
-            className="cursor-pointer p-1 rounded-full"
-          >
-            <svg width="5" height="20" xmlns="http://www.w3.org/2000/svg">
-              <g fill="#828FA3" fill-rule="evenodd">
-                <circle cx="2.308" cy="2.308" r="2.308" />
-                <circle cx="2.308" cy="10" r="2.308" />
-                <circle cx="2.308" cy="17.692" r="2.308" />
-              </g>
-            </svg>
-          </button>
+          <div className="relative">
+            <button
+              onClick={() => setIsActionMenu(true)}
+              className="cursor-pointer p-1 rounded-full"
+            >
+              <svg width="5" height="20" xmlns="http://www.w3.org/2000/svg">
+                <g fill="#828FA3" fill-rule="evenodd">
+                  <circle cx="2.308" cy="2.308" r="2.308" />
+                  <circle cx="2.308" cy="10" r="2.308" />
+                  <circle cx="2.308" cy="17.692" r="2.308" />
+                </g>
+              </svg>
+            </button>
+            {/* Menu */}
+            (isActionMenuOpen &&{" "}
+            <section className="absolute top-5 right-5  w-48 bg-surface rounded-lg z-50 shadow-lg p-4 space-y-4">
+              <button
+                onClick={() => {
+                  // function to open edit task modal
+                  onClose();
+                }}
+                className="text-left w-full rounded-md text-ink-muted body-l
+                cursor-pointer transition-colors duration-150 hover:text-brand
+                "
+              >
+                Edit Task
+              </button>
+              <button
+                onClick={() => {
+                  // function to open delete task modal
+                  onClose();
+                }}
+                className="text-left w-full rounded-md text-danger body-l
+                  cursor-pointer transition-colors duration-150 hover:text-danger-hover
+                  "
+              >
+                Delete Task
+              </button>
+            </section>
+            )
+          </div>
         </div>
 
         {/* Description */}
