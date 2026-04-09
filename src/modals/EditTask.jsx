@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useBoard } from "../context/BoardContext";
 import { generateId } from "../utils";
 
-export default function AddTask({ isOpen, onClose }) {
+export default function EditTask({ isOpen, onClose }) {
   const { activeBoard, addTask } = useBoard();
 
   const [title, setTitle] = useState("");

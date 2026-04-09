@@ -7,6 +7,7 @@ import Sidebar from "../src/layout/Sidebar";
 import ShowSidebarButton from "./ui/ShowSidebarButton";
 import BoardCanvas from "./layout/BoardCanvas";
 import UIProvider from "./context/UIContext";
+import ModalManager from "./modals/ModalManager";
 
 export default function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -33,6 +34,7 @@ export default function App() {
             </section>
           </main>
         </div>
+        <ModalManager />
       </UIProvider>
     </BoardProvider>
   );
