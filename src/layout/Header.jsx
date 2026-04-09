@@ -95,19 +95,13 @@ function Header({ isSidebarOpen }) {
             <img src={ellipsis} alt="Board options" />
           </button>
 
-          {/* Add task modal */}
-          <AddTask
-            isOpen={isAddTaskOpen}
-            onClose={() => setIsAddTaskOpen(false)}
-          />
-
           {/* Action Menu */}
           <ActionMenu
             isOpen={isActionMenuOpen}
             onClose={() => setIsActionMenuOpen(false)}
           />
         </div>
-      </nav>{" "}
+      </nav>
     </header>
   );
 }

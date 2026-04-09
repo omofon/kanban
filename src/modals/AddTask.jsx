@@ -15,8 +15,6 @@ export default function AddTask({ isOpen, onClose }) {
 
   if (!isOpen) return null;
 
-  // --- Subtask helpers --- //
-
   const handleAddSubtask = () => {
     setSubtasks((prev) => [
       ...prev,
@@ -36,14 +34,10 @@ export default function AddTask({ isOpen, onClose }) {
     setSubtasks((prev) => prev.filter((subtask) => subtask.id !== id));
   };
 
-  // --- Submit --- //
-
   const handleSubmit = () => {
-    // Validate title
     const isTitleEmpty = title.trim() === "";
     setTitleError(isTitleEmpty);
 
-    // Validate subtasks
     const validatedSubtasks = subtasks.map((subtask) => ({
       ...subtask,
       error: subtask.value.trim() === "",
@@ -51,10 +45,8 @@ export default function AddTask({ isOpen, onClose }) {
     setSubtasks(validatedSubtasks);
 
     const hasSubtaskErrors = validatedSubtasks.some((s) => s.error);
-
     if (isTitleEmpty || hasSubtaskErrors) return;
 
-    // Add tasks to boards through BoardContext
     addTask(
       title.trim(),
       description.trim(),
@@ -62,13 +54,10 @@ export default function AddTask({ isOpen, onClose }) {
       subtasks.map((s) => s.value.trim()),
     );
 
-    // Clear Form Fields
     setTitle("");
     setDescription("");
     setStatus(activeBoard?.columns[0]?.name ?? "");
     setSubtasks([{ id: generateId(), value: "", error: false }]);
-
-    // Close modal
     onClose();
   };
 
@@ -80,10 +69,10 @@ export default function AddTask({ isOpen, onClose }) {
     >
       {/* Modal */}
       <article
-        className="bg-surface rounded-lg w-full max-w-120 p-6 md:p-8 shadow-lg flex flex-col gap-6"
+        className="bg-surface rounded-lg w-full max-w-120 p-6 md:p-8 shadow-lg
+          flex flex-col gap-6 max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Heading */}
         <span className="heading-l text-ink">Add New Task</span>
 
         {/* Title */}
@@ -102,10 +91,10 @@ export default function AddTask({ isOpen, onClose }) {
             placeholder="e.g. Take coffee break"
             className={`w-full bg-surface border rounded-md px-4 py-2 body-l text-ink
               outline-none placeholder:text-ink-muted/40 focus:border-brand transition-colors
-              ${titleError ? "border-red" : "border-edge"}`}
+              ${titleError ? "border-danger" : "border-edge"}`}
           />
           {titleError && (
-            <span className="body-l text-red">Can't be empty</span>
+            <span className="body-l text-danger">Can't be empty</span>
           )}
         </section>
 
@@ -128,7 +117,6 @@ export default function AddTask({ isOpen, onClose }) {
         {/* Subtasks */}
         <section className="flex flex-col gap-2">
           <span className="body-m text-ink-muted">Subtasks</span>
-
           <ul className="flex flex-col gap-3">
             {subtasks.map((subtask) => (
               <li key={subtask.id} className="flex items-center gap-4">
@@ -142,19 +130,17 @@ export default function AddTask({ isOpen, onClose }) {
                     placeholder="e.g. Make coffee"
                     className={`w-full bg-surface border rounded-md px-4 py-2 body-l text-ink
                       outline-none placeholder:text-ink-muted/40 focus:border-brand transition-colors
-                      ${subtask.error ? "border-red" : "border-edge"}`}
+                      ${subtask.error ? "border-danger" : "border-edge"}`}
                   />
                   {subtask.error && (
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 body-l text-red whitespace-nowrap">
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 body-l text-danger whitespace-nowrap">
                       Can't be empty
                     </span>
                   )}
                 </div>
-
-                {/* Remove subtask */}
                 <button
                   onClick={() => handleRemoveSubtask(subtask.id)}
-                  className="cursor-pointer shrink-0 text-ink-muted hover:text-red transition-colors"
+                  className="cursor-pointer shrink-0 text-ink-muted hover:text-danger transition-colors"
                   aria-label="Remove subtask"
                 >
                   <svg
@@ -171,7 +157,6 @@ export default function AddTask({ isOpen, onClose }) {
               </li>
             ))}
           </ul>
-
           <button
             onClick={handleAddSubtask}
             className="w-full mt-1 py-2 rounded-full bg-brand/10 text-brand body-l
@@ -195,13 +180,12 @@ export default function AddTask({ isOpen, onClose }) {
                 <option
                   key={column.id}
                   value={column.name}
-                  className="rounded-md bg-surface text-ink"
+                  className="bg-surface text-ink"
                 >
                   {column.name}
                 </option>
               ))}
             </select>
-            {/* Chevron */}
             <svg
               className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none"
               width="10"

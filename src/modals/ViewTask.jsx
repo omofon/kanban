@@ -1,12 +1,13 @@
-import { useBoard } from "../context/BoardContext";
-
 import { useState } from "react";
+import { useBoard } from "../context/BoardContext";
+import { useUI } from "../context/UIContext";
 
 export default function ViewTask({ isOpen, onClose, task }) {
   const { activeBoard, moveTask, toggleSubtask } = useBoard();
+  const { openModal } = useUI();
   const [status, setStatus] = useState(task.status);
   const [subtasks, setSubtasks] = useState(task.subtasks);
-  const [isActionMenuOpen, setIsActionMenu] = useState(false);
+  const [isActionMenuOpen, setIsActionMenuOpen] = useState(false);
 
   if (!isOpen) return null;
 
@@ -42,49 +43,43 @@ export default function ViewTask({ isOpen, onClose, task }) {
         className="bg-surface rounded-lg w-full max-w-120 p-6 md:p-8 shadow-lg flex flex-col gap-6"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Title */}
+        {/* Title + ellipsis */}
         <div className="w-full flex gap-6 items-center justify-between">
           <span className="heading-l text-ink">{task.title}</span>
+
           <div className="relative">
             <button
-              onClick={() => setIsActionMenu(true)}
+              onClick={() => setIsActionMenuOpen((prev) => !prev)}
               className="cursor-pointer p-1 rounded-full"
             >
               <svg width="5" height="20" xmlns="http://www.w3.org/2000/svg">
-                <g fill="#828FA3" fill-rule="evenodd">
+                <g fill="#828FA3" fillRule="evenodd">
                   <circle cx="2.308" cy="2.308" r="2.308" />
                   <circle cx="2.308" cy="10" r="2.308" />
                   <circle cx="2.308" cy="17.692" r="2.308" />
                 </g>
               </svg>
             </button>
-            {/* Menu */}
-            (isActionMenuOpen &&{" "}
-            <section className="absolute top-5 right-5  w-48 bg-surface rounded-lg z-50 shadow-lg p-4 space-y-4">
-              <button
-                onClick={() => {
-                  // function to open edit task modal
-                  onClose();
-                }}
-                className="text-left w-full rounded-md text-ink-muted body-l
-                cursor-pointer transition-colors duration-150 hover:text-brand
-                "
-              >
-                Edit Task
-              </button>
-              <button
-                onClick={() => {
-                  // function to open delete task modal
-                  onClose();
-                }}
-                className="text-left w-full rounded-md text-danger body-l
-                  cursor-pointer transition-colors duration-150 hover:text-danger-hover
-                  "
-              >
-                Delete Task
-              </button>
-            </section>
-            )
+
+            {/* Action menu for task*/}
+            {isActionMenuOpen && (
+              <section className="absolute top-8 right-0 w-48 bg-surface rounded-lg z-50 shadow-lg p-4 space-y-4">
+                <button
+                  onClick={() => openModal("editTask", { task })}
+                  className="text-left w-full rounded-md text-ink-muted body-l
+                    cursor-pointer transition-colors duration-150 hover:text-brand"
+                >
+                  Edit Task
+                </button>
+                <button
+                  // onClick={() => openModal("deleteTask", { task })}
+                  className="text-left w-full rounded-md text-danger body-l
+                    cursor-pointer transition-colors duration-150 hover:text-danger-hover"
+                >
+                  Delete Task
+                </button>
+              </section>
+            )}
           </div>
         </div>
 
@@ -101,7 +96,7 @@ export default function ViewTask({ isOpen, onClose, task }) {
               <li
                 key={index}
                 onClick={() => handleToggle(index)}
-                className="flex items-center gap-4 bg-canvas p-3 rounded cursor-pointer hover:bg-brand-hover transition-colors"
+                className="flex items-center gap-4 bg-canvas p-3 rounded cursor-pointer hover:bg-brand/10 transition-colors"
               >
                 <input
                   type="checkbox"
@@ -133,7 +128,7 @@ export default function ViewTask({ isOpen, onClose, task }) {
               value={status}
               onChange={handleStatusChange}
               className="w-full bg-surface border border-edge rounded-md px-4 py-3 body-l text-ink
-              cursor-pointer outline-none focus:border-brand appearance-none"
+                cursor-pointer outline-none focus:border-brand appearance-none"
             >
               {activeBoard.columns.map((column) => (
                 <option
@@ -145,6 +140,7 @@ export default function ViewTask({ isOpen, onClose, task }) {
                 </option>
               ))}
             </select>
+
             {/* Chevron */}
             <svg
               className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none"
@@ -154,7 +150,7 @@ export default function ViewTask({ isOpen, onClose, task }) {
             >
               <path
                 stroke="#635FC7"
-                stroke-width="2"
+                strokeWidth="2"
                 fill="none"
                 d="m1 1 4 4 4-4"
               />
