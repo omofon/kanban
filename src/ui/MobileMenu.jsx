@@ -3,10 +3,13 @@ import { useBoard } from "../context/BoardContext";
 import { useTheme } from "../hooks/useTheme";
 import iconMoon from "../assets/icon-dark-theme.svg";
 import iconSun from "../assets/icon-light-theme.svg";
+import { useUI } from "../context/UIContext";
 
 export default function MobileMenu({ isOpen, onClose }) {
   const { boards, activeBoardId, setActiveBoardId } = useBoard();
   const { isDark, toggle } = useTheme();
+
+  const { openModal } = useUI();
 
   if (!isOpen) return null;
 
@@ -58,7 +61,7 @@ export default function MobileMenu({ isOpen, onClose }) {
 
             <li>
               <button
-                onClick={onClose}
+                onClick={()=>openModal("addBoard")}
                 className="w-full flex items-center gap-4 h-11 pl-6 pr-6 rounded-r-full
                 text-brand heading-m hover:bg-menu-hover transition-colors cursor-pointer"
               >
