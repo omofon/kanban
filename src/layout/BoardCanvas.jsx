@@ -57,7 +57,7 @@ export default function BoardCanvas() {
 
           {/* New Column Button */}
           <button
-            // onClick={() => openModal("addColumn")}
+            onClick={() => openModal("addColumn")}
             className="w-70 shrink-0 my-10 rounded-lg cursor-pointer
                 flex items-center justify-center
               bg-lines-light dark:bg-lines-dark
@@ -72,7 +72,7 @@ export default function BoardCanvas() {
             This board is empty. Create a new column to get started.
           </p>
           <button
-            // onClick={() => openModal("addColumn")}
+            onClick={() => openModal("addColumn")}
             className="px-6 py-4 bg-brand hover:bg-brand-hover text-ink-white font-bold rounded-full transition-colors cursor-pointer"
           >
             + Add New Column

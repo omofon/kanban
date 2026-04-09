@@ -3,10 +3,12 @@ import { useBoard } from "../context/BoardContext";
 
 import iconMoon from "../assets/icon-dark-theme.svg";
 import iconSun from "../assets/icon-light-theme.svg";
+import { useUI } from "../context/UIContext";
 
 export default function Sidebar({ isOpen, onHide }) {
   const { isDark, toggle } = useTheme();
   const { boards, activeBoardId, setActiveBoardId } = useBoard();
+  const { openModal } = useUI();
 
   const boardIcon = (
     <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg">
@@ -58,7 +60,7 @@ export default function Sidebar({ isOpen, onHide }) {
           {/* Create new board */}
           <li>
             <button
-              onClick={() => {}}
+              onClick={() => openModal("addBoard")}
               className="
                 w-full flex items-center justify-s gap-3
                 h-11 pl-6 lg:pl-8 pr-6

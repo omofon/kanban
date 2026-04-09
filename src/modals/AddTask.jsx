@@ -9,39 +9,43 @@ export default function AddTask({ isOpen, onClose }) {
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState(activeBoard?.columns[0]?.name ?? "");
   const [subtasks, setSubtasks] = useState([
-    { id: generateId(), value: "", error: false },
+    { title: "", isCompleted: false, error: false },
   ]);
   const [titleError, setTitleError] = useState(false);
 
   if (!isOpen) return null;
 
+  // Add new empty subtask
   const handleAddSubtask = () => {
     setSubtasks((prev) => [
       ...prev,
-      { id: generateId(), value: "", error: false },
+      { title: "", isCompleted: false, error: false },
     ]);
   };
 
-  const handleSubtaskChange = (id, value) => {
+  // Update subtask title
+  const handleSubtaskChange = (index, value) => {
     setSubtasks((prev) =>
-      prev.map((subtask) =>
-        subtask.id !== id ? subtask : { ...subtask, value, error: false },
+      prev.map((s, i) =>
+        i === index ? { ...s, title: value, error: false } : s,
       ),
     );
   };
 
-  const handleRemoveSubtask = (id) => {
-    setSubtasks((prev) => prev.filter((subtask) => subtask.id !== id));
+  // Remove a subtask
+  const handleRemoveSubtask = (index) => {
+    setSubtasks((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = () => {
     const isTitleEmpty = title.trim() === "";
     setTitleError(isTitleEmpty);
 
-    const validatedSubtasks = subtasks.map((subtask) => ({
-      ...subtask,
-      error: subtask.value.trim() === "",
+    const validatedSubtasks = subtasks.map((s) => ({
+      ...s,
+      error: s.title.trim() === "",
     }));
+
     setSubtasks(validatedSubtasks);
 
     const hasSubtaskErrors = validatedSubtasks.some((s) => s.error);
@@ -51,13 +55,14 @@ export default function AddTask({ isOpen, onClose }) {
       title.trim(),
       description.trim(),
       status,
-      subtasks.map((s) => s.value.trim()),
+      validatedSubtasks.map((s) => s.title.trim()),
     );
 
     setTitle("");
     setDescription("");
     setStatus(activeBoard?.columns[0]?.name ?? "");
-    setSubtasks([{ id: generateId(), value: "", error: false }]);
+    setSubtasks([]);
+
     onClose();
   };
 
@@ -77,9 +82,16 @@ export default function AddTask({ isOpen, onClose }) {
 
         {/* Title */}
         <section className="flex flex-col gap-2">
-          <label className="body-m text-ink-muted" htmlFor="task-title">
-            Title
-          </label>
+          <div className="flex justify-between">
+            <label className="body-m text-ink-muted" htmlFor="task-title">
+              Title
+            </label>
+            {titleError && (
+              <span className="body-l text-danger text-right">
+                Can't be empty
+              </span>
+            )}
+          </div>
           <input
             id="task-title"
             type="text"
@@ -93,9 +105,6 @@ export default function AddTask({ isOpen, onClose }) {
               outline-none placeholder:text-ink-muted/40 focus:border-brand transition-colors
               ${titleError ? "border-danger" : "border-edge"}`}
           />
-          {titleError && (
-            <span className="body-l text-danger">Can't be empty</span>
-          )}
         </section>
 
         {/* Description */}
@@ -118,15 +127,13 @@ export default function AddTask({ isOpen, onClose }) {
         <section className="flex flex-col gap-2">
           <span className="body-m text-ink-muted">Subtasks</span>
           <ul className="flex flex-col gap-3">
-            {subtasks.map((subtask) => (
-              <li key={subtask.id} className="flex items-center gap-4">
+            {subtasks.map((subtask, index) => (
+              <li key={index} className="flex items-center gap-4">
                 <div className="relative flex-1">
                   <input
                     type="text"
-                    value={subtask.value}
-                    onChange={(e) =>
-                      handleSubtaskChange(subtask.id, e.target.value)
-                    }
+                    value={subtask.title}
+                    onChange={(e) => handleSubtaskChange(index, e.target.value)}
                     placeholder="e.g. Make coffee"
                     className={`w-full bg-surface border rounded-md px-4 py-2 body-l text-ink
                       outline-none placeholder:text-ink-muted/40 focus:border-brand transition-colors
@@ -139,7 +146,7 @@ export default function AddTask({ isOpen, onClose }) {
                   )}
                 </div>
                 <button
-                  onClick={() => handleRemoveSubtask(subtask.id)}
+                  onClick={() => handleRemoveSubtask(index)}
                   className="cursor-pointer shrink-0 text-ink-muted hover:text-danger transition-colors"
                   aria-label="Remove subtask"
                 >

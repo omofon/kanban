@@ -61,7 +61,7 @@ export default function ViewTask({ isOpen, onClose, task }) {
               </svg>
             </button>
 
-            {/* Action menu for task*/}
+            {/* Action menu for task */}
             {isActionMenuOpen && (
               <section className="absolute top-8 right-0 w-48 bg-surface rounded-lg z-50 shadow-lg p-4 space-y-4">
                 <button
@@ -72,7 +72,7 @@ export default function ViewTask({ isOpen, onClose, task }) {
                   Edit Task
                 </button>
                 <button
-                  // onClick={() => openModal("deleteTask", { task })}
+                  onClick={() => openModal("deleteTask", { task })}
                   className="text-left w-full rounded-md text-danger body-l
                     cursor-pointer transition-colors duration-150 hover:text-danger-hover"
                 >

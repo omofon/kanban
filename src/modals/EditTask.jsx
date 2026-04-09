@@ -1,74 +1,80 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useBoard } from "../context/BoardContext";
-import { generateId } from "../utils";
 
-export default function EditTask({ isOpen, onClose }) {
-  const { activeBoard, addTask } = useBoard();
+export default function EditTask({ isOpen, onClose, task }) {
+  const { activeBoard, updateTask } = useBoard();
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [status, setStatus] = useState(activeBoard?.columns[0]?.name ?? "");
-  const [subtasks, setSubtasks] = useState([
-    { id: generateId(), value: "", error: false },
-  ]);
+  const [status, setStatus] = useState("");
+  const [subtasks, setSubtasks] = useState([]);
   const [titleError, setTitleError] = useState(false);
+
+  // Initialize form with task data
+  useEffect(() => {
+    if (!task) return;
+    setTitle(task.title);
+    setDescription(task.description);
+    setStatus(task.status);
+    setSubtasks(
+      task.subtasks.map((s) => ({
+        title: s.title,
+        isCompleted: s.isCompleted,
+        error: false,
+      })),
+    );
+  }, [task]);
 
   if (!isOpen) return null;
 
-  // --- Subtask helpers --- //
-
+  // Add new empty subtask
   const handleAddSubtask = () => {
     setSubtasks((prev) => [
       ...prev,
-      { id: generateId(), value: "", error: false },
+      { title: "", isCompleted: false, error: false },
     ]);
   };
 
-  const handleSubtaskChange = (id, value) => {
+  // Update subtask title
+  const handleSubtaskChange = (index, value) => {
     setSubtasks((prev) =>
-      prev.map((subtask) =>
-        subtask.id !== id ? subtask : { ...subtask, value, error: false },
+      prev.map((s, i) =>
+        i === index ? { ...s, title: value, error: false } : s,
       ),
     );
   };
 
-  const handleRemoveSubtask = (id) => {
-    setSubtasks((prev) => prev.filter((subtask) => subtask.id !== id));
+  // Remove a subtask
+  const handleRemoveSubtask = (index) => {
+    setSubtasks((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // --- Submit --- //
-
+  // Submit form
   const handleSubmit = () => {
-    // Validate title
     const isTitleEmpty = title.trim() === "";
     setTitleError(isTitleEmpty);
 
-    // Validate subtasks
-    const validatedSubtasks = subtasks.map((subtask) => ({
-      ...subtask,
-      error: subtask.value.trim() === "",
+    const validatedSubtasks = subtasks.map((s) => ({
+      ...s,
+      error: s.title.trim() === "",
     }));
+
     setSubtasks(validatedSubtasks);
 
     const hasSubtaskErrors = validatedSubtasks.some((s) => s.error);
-
     if (isTitleEmpty || hasSubtaskErrors) return;
 
-    // Add tasks to boards through BoardContext
-    addTask(
+    updateTask(
+      task.id,
       title.trim(),
       description.trim(),
       status,
-      subtasks.map((s) => s.value.trim()),
+      validatedSubtasks.map((s) => ({
+        title: s.title.trim(),
+        isCompleted: s.isCompleted,
+      })),
     );
 
-    // Clear Form Fields
-    setTitle("");
-    setDescription("");
-    setStatus(activeBoard?.columns[0]?.name ?? "");
-    setSubtasks([{ id: generateId(), value: "", error: false }]);
-
-    // Close modal
     onClose();
   };
 
@@ -80,11 +86,11 @@ export default function EditTask({ isOpen, onClose }) {
     >
       {/* Modal */}
       <article
-        className="bg-surface rounded-lg w-full max-w-120 p-6 md:p-8 shadow-lg flex flex-col gap-6"
+        className="bg-surface rounded-lg w-full max-w-120 p-6 md:p-8 shadow-lg
+          flex flex-col gap-6 max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Heading */}
-        <span className="heading-l text-ink">Add New Task</span>
+        <span className="heading-l text-ink">Edit Task</span>
 
         {/* Title */}
         <section className="flex flex-col gap-2">
@@ -102,10 +108,10 @@ export default function EditTask({ isOpen, onClose }) {
             placeholder="e.g. Take coffee break"
             className={`w-full bg-surface border rounded-md px-4 py-2 body-l text-ink
               outline-none placeholder:text-ink-muted/40 focus:border-brand transition-colors
-              ${titleError ? "border-red" : "border-edge"}`}
+              ${titleError ? "border-danger" : "border-edge"}`}
           />
           {titleError && (
-            <span className="body-l text-red">Can't be empty</span>
+            <span className="body-l text-danger">Can't be empty</span>
           )}
         </section>
 
@@ -128,33 +134,28 @@ export default function EditTask({ isOpen, onClose }) {
         {/* Subtasks */}
         <section className="flex flex-col gap-2">
           <span className="body-m text-ink-muted">Subtasks</span>
-
           <ul className="flex flex-col gap-3">
-            {subtasks.map((subtask) => (
-              <li key={subtask.id} className="flex items-center gap-4">
+            {subtasks.map((subtask, index) => (
+              <li key={index} className="flex items-center gap-4">
                 <div className="relative flex-1">
                   <input
                     type="text"
-                    value={subtask.value}
-                    onChange={(e) =>
-                      handleSubtaskChange(subtask.id, e.target.value)
-                    }
+                    value={subtask.title}
+                    onChange={(e) => handleSubtaskChange(index, e.target.value)}
                     placeholder="e.g. Make coffee"
                     className={`w-full bg-surface border rounded-md px-4 py-2 body-l text-ink
                       outline-none placeholder:text-ink-muted/40 focus:border-brand transition-colors
-                      ${subtask.error ? "border-red" : "border-edge"}`}
+                      ${subtask.error ? "border-danger" : "border-edge"}`}
                   />
                   {subtask.error && (
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 body-l text-red whitespace-nowrap">
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 body-l text-danger whitespace-nowrap">
                       Can't be empty
                     </span>
                   )}
                 </div>
-
-                {/* Remove subtask */}
                 <button
-                  onClick={() => handleRemoveSubtask(subtask.id)}
-                  className="cursor-pointer shrink-0 text-ink-muted hover:text-red transition-colors"
+                  onClick={() => handleRemoveSubtask(index)}
+                  className="cursor-pointer shrink-0 text-ink-muted hover:text-danger transition-colors"
                   aria-label="Remove subtask"
                 >
                   <svg
@@ -171,7 +172,6 @@ export default function EditTask({ isOpen, onClose }) {
               </li>
             ))}
           </ul>
-
           <button
             onClick={handleAddSubtask}
             className="w-full mt-1 py-2 rounded-full bg-brand/10 text-brand body-l
@@ -195,13 +195,12 @@ export default function EditTask({ isOpen, onClose }) {
                 <option
                   key={column.id}
                   value={column.name}
-                  className="rounded-md bg-surface text-ink"
+                  className="bg-surface text-ink"
                 >
                   {column.name}
                 </option>
               ))}
             </select>
-            {/* Chevron */}
             <svg
               className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none"
               width="10"
@@ -224,7 +223,7 @@ export default function EditTask({ isOpen, onClose }) {
           className="w-full py-2 rounded-full bg-brand text-white body-l
             hover:bg-brand-hover transition-colors cursor-pointer"
         >
-          Create Task
+          Save Changes
         </button>
       </article>
     </div>

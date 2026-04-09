@@ -116,15 +116,10 @@ export default function BoardProvider({ children }) {
                 title: newTitle,
                 description: newDescription,
                 status: newStatus,
-                subtasks: newSubtasks.map((subtaskTitle) => {
-                  const existing = task.subtasks.find(
-                    (s) => s.title === subtaskTitle,
-                  );
-                  return {
-                    title: subtaskTitle,
-                    isCompleted: existing ? existing.isCompleted : false,
-                  };
-                }),
+                subtasks: newSubtasks.map((subtask) => ({
+                  title: subtask.title,
+                  isCompleted: subtask.isCompleted ?? false,
+                })),
               };
             }),
           })),
@@ -132,7 +127,6 @@ export default function BoardProvider({ children }) {
       }),
     );
 
-    // If the status changed, relocate the task to its new column.
     const currentTask = activeBoard?.columns
       .flatMap((col) => col.tasks)
       .find((t) => t.id === taskId);
@@ -142,14 +136,14 @@ export default function BoardProvider({ children }) {
     }
   };
 
-  const deleteTask = (columnId, taskId) => {
+  const deleteTask = (columnName, taskId) => {
     setBoards((prev) =>
       prev.map((board) => {
         if (board.id !== activeBoard.id) return board;
         return {
           ...board,
           columns: board.columns.map((column) => {
-            if (column.id !== columnId) return column;
+            if (column.name !== columnName) return column;
             return {
               ...column,
               tasks: column.tasks.filter((task) => task.id !== taskId),
