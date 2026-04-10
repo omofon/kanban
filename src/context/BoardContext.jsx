@@ -184,6 +184,25 @@ export default function BoardProvider({ children }) {
     );
   };
 
+  const reorderTask = (columnId, sourceIndex, destIndex) => {
+    boards.map((board) => {
+      if (board.id !== activeBoardId) return board;
+      return {
+        ...board,
+        columns: boards.columns.map((column) => {
+          if (column.id !== columnId) return column;
+
+          const tasks = [...column.tasks];
+
+          const [movedTask] = tasks.splice(sourceIndex, 1);
+          tasks.splice(destIndex, 0, moveTask);
+
+          return { ...column, tasks };
+        }),
+      };
+    });
+  };
+
   const toggleSubtask = (taskId, subtaskIndex) => {
     setBoards((prev) =>
       prev.map((board) => {
@@ -225,6 +244,7 @@ export default function BoardProvider({ children }) {
         updateTask,
         deleteTask,
         moveTask,
+        reorderTask,
         toggleSubtask,
       }}
     >
