@@ -11,6 +11,11 @@ export default function BoardCanvas() {
     Done: "bg-done",
   };
 
+  const pickRandomColour = () => {
+    const index = Math.floor(Math.random() * columnIcon.length );
+    return columnIcon.at(index)
+  };
+
   return (
     <div className="h-full">
       {hasColumns ? (
@@ -23,7 +28,7 @@ export default function BoardCanvas() {
               {/* Column header */}
               <div className="flex gap-3">
                 <div
-                  className={`w-3.75 h-3.75 rounded-full ${columnIcon?.[column.name] ?? "bg-todo"}`}
+                  className={`w-3.75 h-3.75 rounded-full ${columnIcon?.[column.name] ?? pickRandomColour()}`}
                 />
                 <h2 className="text-ink-muted heading-s uppercase">
                   {column?.name} ({column?.tasks?.length ?? 0})
