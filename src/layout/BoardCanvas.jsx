@@ -1,11 +1,34 @@
-import { DragDropProvider } from "@dnd-kit/react";
+import {
+  DndContext,
+  closestCorners,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  arrayMove,
+} from "@dnd-kit/sortable";
 import { useBoard } from "../context/BoardContext";
 import { useUI } from "../context/UIContext";
-import BoardColumn from "../ui/BoardColumn";
+import TaskCard from "../ui/TaskCard";
 
 export default function BoardCanvas() {
   const { activeBoard, hasColumns } = useBoard();
   const { openModal } = useUI();
+
+  const columnIcon = {
+    Todo: "bg-todo",
+    Doing: "bg-doing",
+    Done: "bg-done",
+  };
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 5 },
+    }),
+  );
 
   const handleDragEnd = (event) => {
     if (event.canceled) return;
@@ -13,7 +36,7 @@ export default function BoardCanvas() {
     const { source, target } = event.operation;
     if (!target) return;
 
-    // Find which column the dragged task came from
+    // Find source and target columns
     const sourceColumn = activeBoard.columns.find((col) =>
       col.tasks.some((t) => t.id === source.id),
     );
@@ -39,10 +62,39 @@ export default function BoardCanvas() {
   return (
     <div className="h-full">
       {hasColumns ? (
-        <DragDropProvider onDragEnd={handleDragEnd}>
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCorners}
+          onDragEnd={handleDragEnd}
+        >
           <div className="flex gap-6 h-full w-max">
             {activeBoard.columns.map((column) => (
-              <BoardColumn key={column.id} column={column} />
+              <section
+                key={column.id}
+                className="w-70 shrink-0 flex flex-col gap-6 items-start"
+              >
+                {/* Column header */}
+                <div className="flex gap-3">
+                  <div
+                    className={`w-3.75 h-3.75 rounded-full ${columnIcon?.[column.name] ?? "bg-todo"}`}
+                  />
+                  <h2 className="text-ink-muted heading-s uppercase">
+                    {column?.name} ({column?.tasks?.length ?? 0})
+                  </h2>
+                </div>
+
+                {/* Sortable Tasks */}
+                <SortableContext
+                  items={column.tasks.map((t) => t.id)}
+                  strategy={verticalListSortingStrategy}
+                >
+                  <ul className="flex flex-col gap-5 w-full min-h-10">
+                    {column.tasks.map((task) => (
+                      <TaskCard key={task.id} task={task} />
+                    ))}
+                  </ul>
+                </SortableContext>
+              </section>
             ))}
 
             {/* New Column Button */}
@@ -56,7 +108,7 @@ export default function BoardCanvas() {
               <span className="heading-xl">+ New Column</span>
             </button>
           </div>
-        </DragDropProvider>
+        </DndContext>
       ) : (
         <div className="h-full flex flex-col items-center justify-center gap-6">
           <p className="text-ink-muted text-lg font-bold text-center">
